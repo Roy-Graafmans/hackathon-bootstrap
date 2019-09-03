@@ -1,0 +1,81 @@
+<div class="container">
+	<div class="py-5 text-center">
+		<img src="https://neo-cdn.azureedge.net/images/neo-logo/144.png" width="72px;" style="padding-bottom: 16px;" alt="NEO">
+		<h2 class="text-primary">NEO Hackathon Messenger</h2>
+		<p class="lead">Welcome to the NEO Hackathon bootstrap project</p>
+	</div>
+
+	<div class="row">
+		<div class="col-12" id="header">
+			<div class="card">
+				<div class="card-body">
+					<h5 class="card-title">Send a message in the hackathon messenger</h5>
+					<form id="messenger">
+						<div class="form-row d-flex justify-content-between align-items-center">
+							<div class="col-auto">
+								<label class="sr-only" for="username">Username</label>
+								<div class="input-group mb-2">
+									<div class="input-group-prepend">
+										<div class="input-group-text">@</div>
+									</div>
+									<input type="text" class="form-control" id="username" placeholder="Username">
+								</div>
+							</div>
+							<div class="col-auto flex-fill">
+								<label class="sr-only" for="message">Name</label>
+								<input type="text" class="form-control mb-2 " id="message" placeholder="Type a message here">
+							</div>
+							<div class="col-auto">
+								<button type="submit" class="btn btn-primary mb-2">Submit</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-12 d-flex flex-column-reverse" id="main">
+		</div>
+	</div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha384-vk5WoKIaW/vJyUAd9n/wmopsmNhiy+L2Z+SBxGYnUkunIxVxAv/UtMOhba/xskxh" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js" integrity="sha384-FzT3vTVGXqf7wRfy8k4BiyzvbNfeYjK+frTVqZeNDFl8woCbF0CYG6g2fMEFFo/i" crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+
+	'use strict';
+
+	let socket = new WebSocket("ws://127.0.0.1:4080/socket/");
+
+	socket.onopen = function () {
+		console.log('WebSocket connection opened successfully');
+		socket.send('Warm greetings from a web user');
+	};
+
+	socket.onmessage = function (event) {
+		if (event.data) {
+			let Event = JSON.parse(event.data);
+			console.log(Event);
+			if (Event.message) {
+				let object = $('<div class="my-3 card"><div class="card-header"><span class="float-right">'+Event.time+'</span><h5 class="p-0 m-0 card-title">'+Event.from+'</h5></div><div class="card-body"><h6 class="card-subtitle mb-2 text-muted">'+Event.uuid+'</h6><p class="card-text text-primary h3">'+Event.message+'</p></div></div>');
+				$('#main').append(object);
+			};
+		};
+	};
+
+	$('#messenger').ajaxForm( {
+		beforeSubmit: function() {
+			console.log('Sending message to server');
+			let username = $('#username').val() || "Nobody";
+			let message = $('#message').val() || "Nothing";
+			let object = JSON.stringify( { "username": username, "message": message } );
+			socket.send(object);
+		}
+	} );
+
+</script>

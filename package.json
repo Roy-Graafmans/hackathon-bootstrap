@@ -1,0 +1,42 @@
+{
+  "name": "hackathon-bootstrap",
+  "version": "1.0.0",
+  "description": "Bootrstrap project for the NEO Hackathon to kick start the development",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index",
+    "test": "node test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NeoBlocks/hackathon-bootstrap.git"
+  },
+  "keywords": [
+    "neoblocks",
+    "neo",
+    "hackathon",
+    "amsterdam"
+  ],
+  "author": "Thomas Lobker",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/NeoBlocks/hackathon-bootstrap/issues"
+  },
+  "homepage": "https://github.com/NeoBlocks/hackathon-bootstrap#readme",
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  },
+  "dependencies": {
+    "@cityofzion/neon-js": "^4.6.0",
+    "abort-controller": "^3.0.0",
+    "async": "^3.1.0",
+    "bignumber.js": "^9.0.0",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.1.5",
+    "express-handlebars": "^3.1.0",
+    "express-session": "^1.16.2",
+    "express-ws": "^4.0.0",
+    "node-fetch": "^2.6.0",
+    "uuid": "^3.3.3"
+  }
+}
