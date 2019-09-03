@@ -62,7 +62,7 @@
 			let Event = JSON.parse(event.data);
 			console.log(Event);
 			if (Event.message) {
-				let object = $('<div class="my-3 card"><div class="card-header"><span class="float-right">'+Event.time+'</span><h5 class="p-0 m-0 card-title">'+Event.from+'</h5></div><div class="card-body"><h6 class="card-subtitle mb-2 text-muted">'+Event.uuid+'</h6><p class="card-text text-primary h3">'+Event.message+'</p></div></div>');
+				let object = $('<div class="my-3 card animated rubberBand"><div class="card-header"><span class="float-right">'+Event.time+'</span><h5 class="p-0 m-0 card-title">'+Event.from+'</h5></div><div class="card-body"><h6 class="card-subtitle mb-2 text-muted">'+Event.uuid+'</h6><p class="card-text text-primary h3">'+Event.message+'</p></div></div>');
 				$('#main').append(object);
 			};
 		};
