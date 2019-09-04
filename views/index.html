@@ -28,6 +28,9 @@
 							<div class="col-auto">
 								<button type="submit" class="btn btn-primary mb-2">Submit</button>
 							</div>
+							<div class="col-auto">
+								<button type="button" class="btn btn-primary mb-2" id="generate">Generate private key</button>
+							</div>
 						</div>
 					</form>
 				</div>
@@ -62,18 +65,28 @@
 			let Event = JSON.parse(event.data);
 			console.log(Event);
 			if (Event.message) {
-				let object = $('<div class="my-3 card animated rubberBand"><div class="card-header"><span class="float-right">'+Event.time+'</span><h5 class="p-0 m-0 card-title">'+Event.from+'</h5></div><div class="card-body"><h6 class="card-subtitle mb-2 text-muted">'+Event.uuid+'</h6><p class="card-text text-primary h3">'+Event.message+'</p></div></div>');
+				let signature = '';
+				if (Event.signature) {
+					signature = '<div class="card-footer text-muted"><small><strong>Signature:</strong> '+Event.signature+'</small></div>';
+				};
+				let object = $('<div class="my-3 card animated rubberBand"><div class="card-header"><span class="float-right">'+Event.time+'</span><h5 class="p-0 m-0 card-title">'+Event.from+'</h5></div><div class="card-body"><h6 class="card-subtitle mb-2 text-muted">'+Event.uuid+'</h6><p class="card-text text-primary h3">'+Event.message+'</p></div>'+signature+'</div>');
 				$('#main').append(object);
 			};
 		};
 	};
 
+	$('#generate').on('click', function () {
+		console.log('Requesting server to create a new private key');
+		let object = JSON.stringify( { "pgp": { "task": "create" } } );
+		socket.send(object);
+	});
+
 	$('#messenger').ajaxForm( {
-		beforeSubmit: function() {
+		beforeSubmit: function () {
 			console.log('Sending message to server');
 			let username = $('#username').val() || "Nobody";
 			let message = $('#message').val() || "Nothing";
-			let object = JSON.stringify( { "username": username, "message": message } );
+			let object = JSON.stringify( { "message": { "username": username, "message": message } } );
 			socket.send(object);
 		}
 	} );

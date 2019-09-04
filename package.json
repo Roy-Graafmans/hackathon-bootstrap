@@ -37,6 +37,7 @@
     "express-session": "^1.16.2",
     "express-ws": "^4.0.0",
     "node-fetch": "^2.6.0",
+    "openpgp": "^4.6.0",
     "uuid": "^3.3.3"
   }
 }
