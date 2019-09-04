@@ -28,7 +28,7 @@ const server = async () => {
 
 	openpgp.initWorker({ path: 'openpgp.worker.js' });
 
-	let key, identity = {};
+	let key = {}, identity = {};
 
 	class Service {
 		constructor() {
@@ -180,7 +180,7 @@ const server = async () => {
 						let event = JSON.parse(message);
 						if (event.hasOwnProperty("message")) {
 							let socket = Socket.getWss('/socket/');
-							let signature = await service.sign(event.message.message, key, identity) || "Message has no signature";
+							let signature = await service.sign(event.message.message, key[uuid], identity[uuid]) || "Message has no signature";
 							let update = JSON.stringify( {
 								"from": event.message.username,
 								"uuid": uuid,
@@ -195,26 +195,26 @@ const server = async () => {
 
 						if (event.hasOwnProperty("pgp")) {
 							if (event.pgp.task == "create") {
-								if (!key) {
+								if (!key[uuid]) {
 									console.log("New private key was requested");
 									let options = {
 										userIds: [ { "name": uuid } ],
 										curve: "ed25519",
 										passphrase: uuid
 									};
-									key = await openpgp.generateKey(options);
-									identity = {
-										"key": key,
-										"public": service.keytohex(key.key, true),
-										"private": service.keytohex(key.key, false),
-										"fingerprint": service.arraytohex(key.key.primaryKey.fingerprint),
+									key[uuid] = await openpgp.generateKey(options);
+									identity[uuid] = {
+										"key": key[uuid],
+										"public": service.keytohex(key[uuid].key, true),
+										"private": service.keytohex(key[uuid].key, false),
+										"fingerprint": service.arraytohex(key[uuid].key.primaryKey.fingerprint),
 										"uuid": uuid
 									};
 									let update = JSON.stringify( {
 										"from": "System Notification",
 										"uuid": uuid,
 										"time": service.time(),
-										"message": "New PGP private key has been generated with fingerprint " + identity.fingerprint
+										"message": "New PGP private key has been generated with fingerprint " + identity[uuid].fingerprint
 									} );
 									ws.send(update);
 								} else {
