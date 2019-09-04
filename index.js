@@ -19,7 +19,7 @@ const init = async () => {
 const server = async () => {
 	let app = express();
 	let Socket = require('express-ws')(app);
-	app.listen(4080, "127.0.0.1");
+	app.listen(4080, "192.168.43.23");
 	app.engine('.html', express_handlebars({ layout: false, extname: '.html' }));
 	app.set('view engine', '.html');
 	app.use(express.urlencoded({ limit: '16mb', extended: true }));

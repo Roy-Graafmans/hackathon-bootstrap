@@ -9,30 +9,22 @@
 		<div class="col-12" id="header">
 			<div class="card">
 				<div class="card-body">
+						<h5 class="card-title">Store a new contact</h5>
+						<div class="form-row justify-content-around d-flex"><div>Public Key</div> <input id="tpk-contact" placeholder="239u80..."></input></div>
+						<div class="form-row justify-content-around d-flex"><div>Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div> <input id="name-contact" placeholder="Henk..."></input></div>
+						<button id="button2" style="float:right;" class="btn btn-primary mb-2">Add</button>
+						<div id="contacts"></div>
+						<hr></hr>
 					<h5 class="card-title">Send a message in the hackathon messenger</h5>
-					<form id="messenger">
-						<div class="form-row d-flex justify-content-between align-items-center">
-							<div class="col-auto">
-								<label class="sr-only" for="username">Username</label>
-								<div class="input-group mb-2">
-									<div class="input-group-prepend">
-										<div class="input-group-text">@</div>
-									</div>
-									<input type="text" class="form-control" id="username" placeholder="Username">
-								</div>
-							</div>
-							<div class="col-auto flex-fill">
-								<label class="sr-only" for="message">Name</label>
-								<input type="text" class="form-control mb-2 " id="message" placeholder="Type a message here">
-							</div>
-							<div class="col-auto">
-								<button type="submit" class="btn btn-primary mb-2">Submit</button>
-							</div>
-							<div class="col-auto">
-								<button type="button" class="btn btn-primary mb-2" id="generate">Generate private key</button>
-							</div>
-						</div>
-					</form>
+					<div>
+						<div class="form-row justify-content-around d-flex"><div>Their Public Key</div> <input id="tpk" placeholder="239u80..."></input></div>
+						<div class="form-row justify-content-around d-flex"><div>Your Public Key</div> <input placeholder="gj459y84h5..."></input></div>
+						<div class="form-row justify-content-around d-flex"><div>Message&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div> <input id="messagebox" placeholder="Hello!"></input></div>
+						<hr></hr>
+						<div class="form-row justify-content-around d-flex"><div>Your Private Key</div> <input placeholder="a748tg39ty..."></input></div>
+						<button id="button1" style="float:right;" class="btn btn-primary mb-2">Send</button>
+
+					</div>
 				</div>
 			</div>
 		</div>
@@ -53,7 +45,7 @@
 
 	'use strict';
 
-	let socket = new WebSocket("ws://127.0.0.1:4080/socket/");
+	let socket = new WebSocket("ws://192.168.43.23:4080/socket/");
 
 	socket.onopen = function () {
 		console.log('WebSocket connection opened successfully');
@@ -75,12 +67,6 @@
 		};
 	};
 
-	$('#generate').on('click', function () {
-		console.log('Requesting server to create a new private key');
-		let object = JSON.stringify( { "pgp": { "task": "create" } } );
-		socket.send(object);
-	});
-
 	$('#messenger').ajaxForm( {
 		beforeSubmit: function () {
 			console.log('Sending message to server');
@@ -90,5 +76,21 @@
 			socket.send(object);
 		}
 	} );
+
+	$('#button1').on('click', function(eh) {
+		var message = $('#messagebox').val();
+		var tpk = $('#tpk').val();
+		console.log(message);
+		let object = $('<div class="my-3 card animated rubberBand"><div class="card-header"><span class="float-right">'+'Just now'+'</span><h5 class="p-0 m-0 card-title">'+'You'+'</h5></div><div class="card-body"><h6 class="card-subtitle mb-2 text-muted">To: '+tpk+'</h6><p class="card-text text-primary h3">'+message+'</p></div>'+''+'</div>');
+				$('#main').append(object);
+	});
+	function sethenk() {
+		$('#tpk').val('r34789rh9724th97');
+	}	
+	$('#button2').on('click', function(eh) {
+		$('#contacts').append($('<button onclick="sethenk()">Henk</button>'))
+	});
+
+
 
 </script>
